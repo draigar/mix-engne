@@ -36,6 +36,5 @@ export const useAuth = () => {
 
     return {
         doLogin,
-        data,
     }
 }

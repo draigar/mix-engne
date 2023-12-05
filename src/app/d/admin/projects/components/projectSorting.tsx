@@ -17,22 +17,22 @@ export const ProjectSortingComponent = () => {
 
     const { notData } = state;
 
-    const handleSearch = (searchText) => {
-        const data = searchData.filter((item) => item.title.toUpperCase().startsWith(searchText.toUpperCase()));
+    const handleSearch = (searchText: any) => {
+        const data = searchData.filter((item: any) => item.title.toUpperCase().startsWith(searchText.toUpperCase()));
         setState({
             ...state,
             notData: data,
         });
     };
 
-    const onChangeCategory = (value) => {
+    const onChangeCategory = (value: any) => {
         setState({
             ...state,
             categoryActive: value,
         });
     };
 
-    const onSorting = (selectedItems) => { }
+    const onSorting = (selectedItems: any) => { }
 
     return (
         <ProjectSorting>
