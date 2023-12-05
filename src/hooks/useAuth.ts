@@ -2,6 +2,7 @@ import { http } from "@/config";
 import { authStore } from "@/store";
 import { AuthData, UserDataType, apiResponse } from "@/types";
 import Cookies from "js-cookie";
+import { useState } from "react";
 import { useMutation, useQuery } from "react-query"
 
 export const useAuth = () => {
@@ -35,5 +36,6 @@ export const useAuth = () => {
 
     return {
         doLogin,
+        data,
     }
 }
