@@ -11,6 +11,9 @@ const Aside = Styled.aside`
   // background-repeat: no-repeat;
   // background-attachment: fixed;
   // background-position: left top;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   @media only screen and (max-width: 767px){
     height: 100%;
   }
@@ -39,6 +42,13 @@ const Aside = Styled.aside`
       }
     }
   }
+`;
+
+const BoxContent = Styled.div`
+  background-color: white;
+  width: 30%;
+  margin: 20px auto;
+  border-radius: 10px;
 `;
 
 const Content = Styled.div`
@@ -231,4 +241,4 @@ const AuthWrapper = Styled.div`
   }
 `;
 
-export { Aside, Content, AuthWrapper };
+export { Aside, Content, AuthWrapper, BoxContent };

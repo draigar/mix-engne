@@ -61,9 +61,6 @@ export default function Login() {
     return (
         <>
             <AuthWrapper>
-                <p className="auth-notice">
-                    Don&rsquo;t have an account? <Link href="#">Sign up now</Link>
-                </p>
                 <div className="auth-contents">
                     <Form name="login" form={form} onFinish={handleSubmit} layout="vertical" onFinishFailed={onFinishFailed}>
                         <Heading as="h3">
@@ -75,10 +72,10 @@ export default function Login() {
                             initialValue="viktor-khatoon647@rediffmail.com"
                             label="Email Address"
                         >
-                            <Input />
+                            <Input size='large' />
                         </Form.Item>
                         <Form.Item name="password" initialValue="@secret16" label="Password">
-                            <Input.Password placeholder="Password" />
+                            <Input.Password placeholder="Password" size='large' />
                         </Form.Item>
                         <div className="auth-form-action">
                             <Checkbox onChange={onChange}>Keep me logged in</Checkbox>
@@ -93,6 +90,9 @@ export default function Login() {
                         </Form.Item>
                     </Form>
                 </div>
+                <p className="auth-notice">
+                    Don&rsquo;t have an account? <Link href="#">Sign up now</Link>
+                </p>
             </AuthWrapper>
         </>
     )

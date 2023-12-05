@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import './globals.css'
 import { QueryClientProvider } from 'react-query';
 import { rootClientQuery } from '@/config';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 
 
@@ -17,14 +17,18 @@ export default function RootLayout({
 }) {
 
   const router = useRouter();
+  const pathName = usePathname();
 
   useEffect(() => {
     let authData: any = Cookies.get('Auth')
     authData = authData && JSON.parse(authData ?? '');
-    if (!authData?.auth?.access_token) {
-      router.push('/auth/login')
+    if (!authData?.auth?.access_token && pathName.endsWith('/')) {
+      router.push('/l')
+    } else {
+      const userRole = authData?.user
+      console.log('userRole ', userRole)
     }
-  }, [router])
+  }, [pathName, router])
 
   return (
     <html lang="en">
