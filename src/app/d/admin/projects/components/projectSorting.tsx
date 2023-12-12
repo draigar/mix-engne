@@ -4,11 +4,14 @@ import { ProjectHeader, ProjectSorting } from '../style';
 import Link from "next/link";
 import { useState } from "react";
 import { AutoComplete } from '@/components/autoComplete/autoComplete';
+import { useServices } from '@/hooks';
 
 
 export const ProjectSortingComponent = () => {
 
     const searchData: [] = [];
+
+    const {serviceData} = useServices({enableFetchServices: true});
 
     const [state, setState] = useState({
         notData: [],
@@ -57,12 +60,12 @@ export const ProjectSortingComponent = () => {
                             </li>
                             <li className={state.categoryActive === 'late' ? 'active' : 'deactivate'}>
                                 <Link onClick={() => onChangeCategory('late')} href="#">
-                                    Late
+                                    Active
                                 </Link>
                             </li>
                             <li className={state.categoryActive === 'early' ? 'active' : 'deactivate'}>
                                 <Link onClick={() => onChangeCategory('early')} href="#">
-                                    Early
+                                    Disabled
                                 </Link>
                             </li>
                         </ul>
@@ -76,10 +79,9 @@ export const ProjectSortingComponent = () => {
                         <span>Sort By:</span>
                         <Select onChange={onSorting} defaultValue="category">
                             <Select.Option value="category">Project Services</Select.Option>
-                            <Select.Option value="rate">Service 1</Select.Option>
-                            <Select.Option value="popular">Service 2</Select.Option>
-                            <Select.Option value="time">Service 3</Select.Option>
-                            <Select.Option value="price">Service 4</Select.Option>
+                            {serviceData.map((el, i) => (
+                                <Select.Option value={el.id} key={i}>{el.title}</Select.Option>
+                            ))}
                         </Select>
                         <div className="layout-style">
                             <Link href="#">

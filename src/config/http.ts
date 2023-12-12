@@ -2,6 +2,7 @@
 import { optionsAxios } from "@/types";
 import { apiInstance } from "./axios";
 import { BASE_URL } from "./api";
+import Cookies from "js-cookie";
 
 class Http {
   async get(path: string, options: optionsAxios = {
@@ -10,10 +11,13 @@ class Http {
   }) {
     const url = options.isGeneric ? path : BASE_URL + path;
     const headers: any = options.headers;
+    let authData: any = Cookies.get('Auth')
+    authData = authData && JSON.parse(authData ?? '');
+    const bearer = authData?.auth?.access_token;
     try {
       const res = await apiInstance.get(url, {
         headers: {
-          Authorization: `Bearer `,
+          Authorization: `Bearer ${bearer}`,
           headers,
         },
       });
@@ -28,12 +32,15 @@ class Http {
   }
   async post(path: string, payload?: any, options: any = {}) {
     const url = options.isGeneric ? path : BASE_URL + path;
+    let authData: any = Cookies.get('Auth')
+    authData = authData && JSON.parse(authData ?? '');
+    const bearer = authData?.auth?.access_token;
     try {
       const res = await apiInstance.post(url, payload, {
         headers: {
           Authorization: options.Token
             ? `Bearer ${options.Token}`
-            : `Bearer `,
+            : `Bearer ${bearer}`,
           options,
         },
       });
@@ -47,12 +54,15 @@ class Http {
   }
   async delete(path: string, options: any = {}) {
     const url = options.isGeneric ? path : BASE_URL + path;
+    let authData: any = Cookies.get('Auth')
+    authData = authData && JSON.parse(authData ?? '');
+    const bearer = authData?.auth?.access_token;
     try {
       const res = await apiInstance.delete(url, {
         headers: {
           Authorization: options.Token
             ? `Bearer ${options.Token}`
-            : `Bearer `,
+            : `Bearer ${bearer}`,
           options,
         },
       })

@@ -1,4 +1,5 @@
 export interface servicesType {
+    id: number;
     title: string,
     description: string,
     features: string,

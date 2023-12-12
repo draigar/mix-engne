@@ -25,5 +25,11 @@ export const menu: menuItemsType[] = [
         key: 'projects',
         url: '/d/admin/projects',
         icon: 'share-2',
-    }
+    },
+    {
+        title: 'Transactions',
+        key: 'transactions',
+        url: '/d/admin/transactions',
+        icon: 'percent',
+    },
 ]

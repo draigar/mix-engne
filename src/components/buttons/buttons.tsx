@@ -42,7 +42,7 @@ const Button = (props: any) => {
       icon={icon}
       color={color}
       social={social}
-      onClick={load && enterLoading}
+      onClick={onClick}
       loading={state.loading}
       {...rest}
     >

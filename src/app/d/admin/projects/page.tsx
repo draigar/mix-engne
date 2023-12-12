@@ -8,10 +8,14 @@ import { ProjectSortingComponent } from "./components/projectSorting";
 import { Suspense, useState } from "react";
 import { ProjectsContent } from "./components/projectsContent";
 import { CreateProjectComponent } from "./components/createProject";
+import { useProjects } from "@/hooks";
 
 const Projects = () => {
 
     const [modalVisible, setModalVisible] = useState(false);
+
+    const {projectsData} = useProjects({enableFetchProjects: true})
+
 
     const showModal = () => {
         console.log('clicked modal')
@@ -27,7 +31,7 @@ const Projects = () => {
             <PageHeader
                 ghost
                 title="Projects"
-                subTitle={<>12 Running Projects</>}
+                subTitle={<>{projectsData.length} Running Projects</>}
                 buttons={[
                     <Button type="primary" onClick={showModal} size="large" key="1" style={{ display: 'flex', alignItems: 'center' }}>
                         <FeatherIcon icon="plus" size={14} />
@@ -51,7 +55,7 @@ const Projects = () => {
                                     </div>
                                 }
                             >
-                                <ProjectsContent />
+                                <ProjectsContent projectsData={projectsData} />
                             </Suspense>
                         </div>
                     </Col>

@@ -9,38 +9,30 @@ import { Cards } from "@/components/cards/frame/cards-frame";
 
 import projectData from '@/demoData/projectData.json';
 import { projectType } from "@/types/projects";
+import { useProjects } from "@/hooks";
 
-export const ProjectsContent = () => {
+import dayjs from 'dayjs';
 
-    const project: projectType[] = [];
+interface ProjectsContentProps {
+    projectsData: projectType[]
+}
 
-    const [state, setState] = useState({
-        projects: project,
-        current: 0,
-        pageSize: 0,
-    });
-    const { projects } = state;
-
-    useEffect(() => {
-        if (project) {
-            // setState({ ...state, projects: project });
-        }
-    }, [projects, state]);
+export const ProjectsContent = (props: ProjectsContentProps) => {
+    const {projectsData} = props;
 
     const onShowSizeChange = (current: number, pageSize: number) => {
-        setState({ ...state, current, pageSize });
+        
     };
 
     const onHandleChange = (current: number, pageSize: number) => {
         // You can create pagination in here
-        setState({ ...state, current, pageSize });
     };
 
     const dataSource: any = [];
 
-    if (projects.length) {
-        projects.map((value) => {
-            const { id, title, status, artist_name, endDate, startDate, link, note, servicesId, createdAt, updatedAt } = value;
+    if (projectsData.length) {
+        projectsData.map((value) => {
+            const { id, title, status, artist_name, endDate, startDate, link, note, services, engineer, createdAt, updatedAt } = value;
             return dataSource.push({
                 key: id,
                 project: (
@@ -49,22 +41,26 @@ export const ProjectsContent = () => {
                             <Link href={`/admin/project/projectDetails/${id}`}>{title}</Link>
                         </Heading>
 
-                        {servicesId && servicesId.map((el, i) => (
+                        {services && services.map((el, i) => (
                             <p key={i}>{el.title}</p>
                         ))}
                     </ProjectListTitle>
                 ),
-                startDate: <span className="date-started">{startDate}</span>,
-                deadline: <span className="date-finished">{endDate}</span>,
+                artist_name: <p>{artist_name}</p>,
+                startDate: <span className="date-started">{dayjs(startDate).format('DD/MM/YYYY')}</span>,
+                deadline: <span className="date-finished">{dayjs(endDate).format('DD/MM/YYYY')}</span>,
                 assigned: (
                     <ProjectListAssignees>
                         <ul>
                             <li>
-                                <img src="@/static/img/users/1.png" alt="" />
+                                <p>{engineer.username}</p>
+                                {/* <img src="@/static/img/users/1.png" alt="" /> */}
                             </li>
                         </ul>
                     </ProjectListAssignees>
                 ),
+                link: <Link href={link} target="_blank">{link}</Link>,
+                note: <p className="truncate">{note}</p>,
                 status: <Tag className={status === 0 ? 'progress' : status === 1 ? 'early' : status === 2 ? 'late' : 'complete'}>
                     {status === 0 ? 'Disabled' : status === 1 ? 'Active' : status === 2 ? 'In Progress' : 'Completed'}
                 </Tag>,
@@ -130,12 +126,11 @@ export const ProjectsContent = () => {
             key: 'status',
         },
         {
-            title: '',
+            title: 'Action',
             dataIndex: 'action',
             key: 'action',
         },
     ];
-
 
     return (
         <Row gutter={25}>
@@ -150,7 +145,7 @@ export const ProjectsContent = () => {
             </Col>
             <Col xs={24} className="pb-30">
                 <ProjectPagination>
-                    {projects.length ? (
+                    {projectsData.length ? (
                         <Pagination
                             onChange={onHandleChange}
                             showSizeChanger

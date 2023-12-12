@@ -54,7 +54,7 @@ const RootLayout = ({
   useEffect(() => {
     let authData: any = Cookies.get('Auth')
     authData = authData && JSON.parse(authData ?? '');
-    if (authData.auth?.access_token) {
+    if (authData?.auth?.access_token) {
       setIsLoggedIn(true)
     } else {
       router.push('/auth/login')
