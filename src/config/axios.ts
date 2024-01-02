@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 // import { authStore } from "web/store";
 import { NextPageContext } from "next";
 import { debugAPIError, debugAPIRequest, debugAPIResponse } from "@/helpers";
+import { errorResponse } from "@/types";
 
 export const nextPr = (ctx: NextPageContext) => ctx.res
 
@@ -37,18 +38,19 @@ apiInstance.interceptors.response.use(
     debugAPIResponse(response);
     return response;
   },
-  (error: AxiosError<any>) => {
+  (error: AxiosError<errorResponse>) => {
     debugAPIError(error);
     console.log(error.code);
     console.log(error.message);
     console.log(error.name);
     if (error.response?.status === 401) {
       Cookies.remove("Auth");
+      Cookies.set("loggedIn", "false")
       // authStore.clearStoredData();
       if (typeof window === 'undefined') {
         return error;
       } else {
-        // window.location.replace("/auth/login");
+        window.location.href="/auth/login"
       }
     }
     throw error;

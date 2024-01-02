@@ -18,6 +18,7 @@ const Button = (props: any) => {
     load,
     children,
     onClick,
+    htmlType,
     ...rest
   } = props;
   const [state, setState] = useState({
@@ -38,12 +39,13 @@ const Button = (props: any) => {
       data={type}
       size={size}
       shape={shape}
+      htmlType={htmlType}
       type={type}
       icon={icon}
       color={color}
       social={social}
       onClick={onClick}
-      loading={state.loading}
+      loading={load}
       {...rest}
     >
       {children}
@@ -53,6 +55,7 @@ const Button = (props: any) => {
 
 Button.defaultProps = {
   type: 'default',
+  htmlType: 'submit',
 };
 
 Button.propTypes = {
@@ -83,6 +86,7 @@ Button.propTypes = {
   load: PropTypes.bool,
   ghost: PropTypes.bool,
   onClick: PropTypes.any,
+  htmlType: PropTypes.oneOf(['submit', 'button', 'reset']),
   children: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.node]),
 };
 

@@ -16,3 +16,9 @@ export interface profileType {
     createdAt?: string;
     updatedAt?: string;
 }
+
+export interface updateProfile {
+    first_name: string;
+    last_name: string;
+    gender: string;
+}

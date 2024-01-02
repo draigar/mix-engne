@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Avatar } from 'antd';
 import Link from 'next/link';
 import { useDispatch } from 'react-redux';
@@ -15,12 +15,16 @@ import Heading from '../../heading/heading';
 import { authStore } from '@/store';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import { functions } from '@/helpers';
 
 function AuthInfo() {
   const [state, setState] = useState({
     flag: 'english',
   });
   const { flag } = state;
+
+  const [imageAvatar, setImageAvatar] = useState('');
 
   const userD = authStore.user;
 
@@ -33,37 +37,42 @@ function AuthInfo() {
     router.push('/auth/login')
   };
 
+  useEffect(() => {
+    const userAvatar = functions.userImage(userD.username ?? '')
+    setImageAvatar(userAvatar)
+  }, [userD.username])
+
   const userContent = (
     <UserDropDwon>
       <div className="user-dropdwon">
         <figure className="user-dropdwon__info">
-          <img src="/static/img/avatar/chat-auth.png" alt="" />
+          <Image alt={userD.username ?? ''} src={imageAvatar} width={46} height={46} />
           <figcaption>
-            <Heading as="h5">{userD.first_name} {userD.last_name}</Heading>
-            <p>UI Expert</p>
+            <Heading as="h5">{userD.profile?.first_name} {userD.profile?.last_name}</Heading>
+            <p>{userD.role === 1 ? 'Admin' : userD.role === 2 ? 'Engineer' : 'User'}</p>
           </figcaption>
         </figure>
         <ul className="user-dropdwon__links">
           <li>
-            <Link href="#">
+            <Link href="/d/user/profile">
               <FeatherIcon icon="user" /> Profile
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link href="#">
               <FeatherIcon icon="settings" /> Settings
             </Link>
-          </li>
-          <li>
+          </li> */}
+          {/* <li>
             <Link href="#">
               <FeatherIcon icon="dollar-sign" /> Billing
             </Link>
-          </li>
-          <li>
+          </li> */}
+          {/* <li>
             <Link href="#">
               <FeatherIcon icon="users" /> Activity
             </Link>
-          </li>
+          </li> */}
           <li>
             <Link href="#">
               <FeatherIcon icon="bell" /> Help
@@ -123,7 +132,7 @@ function AuthInfo() {
       <div className="nav-author">
         <Popover placement="bottomRight" content={userContent} action="click">
           <Link href="#" className="head-example">
-            <Avatar src="https://cdn0.iconfinder.com/data/icons/user-pictures/100/matureman1-512.png" />
+            <Avatar src={imageAvatar} />
           </Link>
         </Popover>
       </div>

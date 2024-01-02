@@ -8,11 +8,15 @@ export interface authType {
 }
 
 export interface UserDataType {
-    first_name: string;
-    last_name: string;
+    id: number;
     email: string;
     role: number;
-    phone_number: string;
     username: string;
-    image: string;
+    profile: ProfileType;
+}
+
+export interface ProfileType {
+    first_name: string;
+    last_name: string;
+    gender: string;
 }

@@ -8,6 +8,8 @@ import { QueryClientProvider } from 'react-query';
 import { rootClientQuery } from '@/config';
 import { usePathname, useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
+import { authStore } from '@/store';
+import { toJS } from 'mobx';
 
 
 export default function RootLayout({
@@ -20,13 +22,20 @@ export default function RootLayout({
   const pathName = usePathname();
 
   useEffect(() => {
-    let authData: any = Cookies.get('Auth')
-    authData = authData && JSON.parse(authData ?? '');
+    // let authData: any = Cookies.get('Auth')
+    // authData = authData && JSON.parse(authData ?? '');
+    const authData = authStore
     if (!authData?.auth?.access_token && pathName.endsWith('/')) {
       router.push('/l')
-    } else {
-      const userRole = authData?.user
-      console.log('userRole ', userRole)
+    } else if (authData?.auth?.access_token && pathName.endsWith('/')) {
+      const userRole = toJS(authData?.user)
+      if (userRole.role === 1) {
+        router.push('/d/admin')
+      } else if (userRole.role === 2) {
+        router.push('/d/engineer')
+      } else if (userRole.role === 3) {
+        router.push('/d/user')
+      }
     }
   }, [pathName, router])
 

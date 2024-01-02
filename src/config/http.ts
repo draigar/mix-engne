@@ -52,6 +52,28 @@ class Http {
       return Promise.reject(e);
     }
   }
+  async put(path: string, payload?: any, options: any = {}) {
+    const url = options.isGeneric ? path : BASE_URL + path;
+    let authData: any = Cookies.get('Auth')
+    authData = authData && JSON.parse(authData ?? '');
+    const bearer = authData?.auth?.access_token;
+    try {
+      const res = await apiInstance.put(url, payload, {
+        headers: {
+          Authorization: options.Token
+            ? `Bearer ${options.Token}`
+            : `Bearer ${bearer}`,
+          options,
+        },
+      });
+      return new Promise((resolve) => {
+        resolve(res);
+      });
+    } catch (e) {
+      // console.log('post error', e.response);
+      return Promise.reject(e);
+    }
+  }
   async delete(path: string, options: any = {}) {
     const url = options.isGeneric ? path : BASE_URL + path;
     let authData: any = Cookies.get('Auth')

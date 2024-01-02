@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react';
-import { Form, Input, Button, notification } from 'antd';
+import { Form, Input, notification } from 'antd';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { FacebookOutlined, TwitterOutlined } from '@ant-design/icons';
 import { AuthWrapper } from '../style';
@@ -12,6 +12,7 @@ import { OpenNotification } from '@/helpers';
 import { apiResponse } from '@/types';
 import { useRouter } from 'next/navigation';
 import { config } from '@/store';
+import { Button } from '@/components/buttons/buttons';
 
 export default function Login() {
 
@@ -25,6 +26,7 @@ export default function Login() {
     });
 
     const handleSubmit = async (values: any) => {
+        console.log(values)
         doLogin.mutate(values, {
             onSuccess: (val: apiResponse) => {
                 console.log('res ', val)
@@ -37,7 +39,15 @@ export default function Login() {
                     })
                     if (data.user.role === 1) {
                         router.push('/d/admin');
+                    } else if (data.user.role === 3) {
+                        router.push('/d/user');
                     }
+                } else {
+                    OpenNotification({
+                        title: 'Login Error',
+                        description: val.message,
+                        type: 'error'
+                    })
                 }
             },
             onError: (e: any) => {
@@ -62,7 +72,7 @@ export default function Login() {
         <>
             <AuthWrapper>
                 <div className="auth-contents">
-                    <Form name="login" form={form} onFinish={handleSubmit} layout="vertical" onFinishFailed={onFinishFailed}>
+                    <Form name="login" onFinish={handleSubmit} layout="vertical" onFinishFailed={onFinishFailed}>
                         <Heading as="h3">
                             Sign in to <span className="color-secondary">{config.AppName}</span>
                         </Heading>
@@ -84,7 +94,7 @@ export default function Login() {
                             </Link>
                         </div>
                         <Form.Item>
-                            <Button className="btn-signin" htmlType="submit" type="primary" size="large">
+                            <Button type="primary" size="large">
                                 {doLogin.isLoading ? 'Processing...' : 'Sign In'}
                             </Button>
                         </Form.Item>

@@ -34,6 +34,7 @@ import { darkTheme } from '@/config/theme/themeVariables';
 import Scrollbars from 'react-custom-scrollbars';
 import MenueItems from '@/layout/MenueItems';
 import Cookies from 'js-cookie';
+import { useUser } from '@/hooks';
 
 const RootLayout = ({
   children,
@@ -47,6 +48,8 @@ const RootLayout = ({
   const [appState, setAppState] = useState<Partial<appState>>({})
   const { activeSearch, collapsed, hide, searchHide } = appState;
 
+  const {fetchUserDetails} = useUser()
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const router = useRouter();
@@ -56,6 +59,7 @@ const RootLayout = ({
     authData = authData && JSON.parse(authData ?? '');
     if (authData?.auth?.access_token) {
       setIsLoggedIn(true)
+      fetchUserDetails.refetch()
     } else {
       router.push('/auth/login')
     }
@@ -154,6 +158,9 @@ const RootLayout = ({
   };
 
   const { Header, Footer, Sider, Content } = Layout;
+
+  const authData = con.authStore
+  const userRole = authData.user.role;
 
   const Render = ({ children }: { children: React.ReactNode }) => {
     return (

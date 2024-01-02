@@ -6,7 +6,8 @@ import { useRouteMatch } from 'react-router-dom';
 import FeatherIcon from 'feather-icons-react';
 import propTypes from 'prop-types';
 import { usePathname, useRouter } from 'next/navigation';
-import { menu } from './menu';
+import { AdminMenu, UserMenu, EngineerMenu } from './menu';
+import { authStore } from '@/store';
 
 const MenuItems = ({ darkMode, toggleCollapsed, topMenu, rtl }: any) => {
   const pathname = usePathname;
@@ -17,7 +18,9 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu, rtl }: any) => {
 
   const { SubMenu } = Menu;
 
-  console.log('links ', pathArray)
+  const userD = authStore.user;
+
+  const menu = userD.role === 1 ? AdminMenu : userD.role === 3 ? UserMenu : EngineerMenu;
 
   const [openKeys, setOpenKeys] = React.useState(
     !topMenu ? [`${mainPathSplit.length > 2 ? mainPathSplit[1] : 'dashboard'}`] : [],
@@ -49,19 +52,21 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu, rtl }: any) => {
       // defaultOpenKeys={}
       activeKey='dashboard'
       overflowedIndicator={<FeatherIcon icon="more-vertical" />}
-      // openKeys={openKeys}
+    // openKeys={openKeys}
     >
       {menu.map((el, i) => (
         el.children ? (
-          el.children.map((tl, i) => (
-            <SubMenu key={el.key} icon={!topMenu && <FeatherIcon icon={el.icon} />} title="Dashboard">
-              <Menu.Item key={tl.key}>
-                <Link onClick={toggleCollapsed} href={`${el.url}`}>
-                  {el.title}
-                </Link>
-              </Menu.Item>
-            </SubMenu>
-          ))
+          <SubMenu key={el.key} icon={!topMenu && <FeatherIcon icon={el.icon} />} title={el.title}>
+            {
+              el.children.map((tl, i) => (
+                <Menu.Item key={tl.key}>
+                  <Link onClick={toggleCollapsed} href={`${tl.url}`}>
+                    {tl.title}
+                  </Link>
+                </Menu.Item>
+              ))
+            }
+          </SubMenu>
         ) : (
           <Menu.Item key="home" icon={!topMenu && <FeatherIcon icon={el.icon} />}>
             <Link onClick={toggleCollapsed} href={`${el.url}`}>
